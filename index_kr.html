@@ -1,0 +1,400 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="utf-8">
+<head>
+	<title>BasePaper</title>
+	<meta name="Author" content="Koo Chi Hoon(kkh975@naver.com)">
+	<meta name="keywords" content="BaseSwipe" />
+	<meta name="keywords" content="This is Javascript or jQuery Function." />
+	<meta http-equiv="Cashe-Control" content="no-cache" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<link rel="stylesheet" href="css/ex-layout.css" />
+	<link rel="stylesheet" href="css/style.css" />
+	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="js/PaperSwipe.dev.js"></script>
+</head>
+<body>
+	<header class="wrap-header">
+		<h1>BasePaper</h1>
+		<p class="nth-1">구글 앱 스토어, 애플 앱 스토어 등에서 화면 미리보기 영역에서 주로 사용되는 플리킹 플러그인입니다. 자바스크립트와 jQuery 동시에 지원하며 시작위치 지정, 슬라이더의 페이징 기능등 많이 사용되어지는 기능을 넣었습니다.</p>
+		<p class="nth-2">
+			(IE7, IE8 등 css3를 지원하지 않는 브라우저에서는 사용할 수 없습니다.)<br />
+			<img src="images/ie.gif" alt="Internet Explorer" />
+			<img src="images/firefox.gif" alt="Firefox" />
+			<img src="images/chrome.gif" alt="Chrome" />
+			<img src="images/safari.gif" alt="Safari" />
+		</p>
+		<a class="to-en" href="index.html"><img src="images/us.png" alt="to english" /></a>
+		<a class="to-kr" href="index-kr.html"><img src="images/kr.png" alt="to korean" /></a>
+	</header>
+
+	<main>
+
+		<!-- example -->
+		<div class="ex wrap">
+			<header>
+				<h1>Example</h1>
+			</header>
+
+			<!-- Default -->
+			<section class="section-1">
+				<header>
+					<h1>Default</h1>
+					<h2>status: <span class="ststus-display">0</span></h2>
+				</header>
+
+				<div class="listWrap">
+					<ul class="list">
+						<li><div style="background: red; width: 200px;">0</div></li>
+						<li><div style="background: brown; width: 50px;">1</div></li>
+						<li><div style="background: orange; ">2</div></li>
+						<li><div style="background: green; width: 150px;">3</div></li>
+						<li><div style="background: blue;">4</div></li>
+						<li><div style="background: purple; width: 50px;">5</div></li>
+					</ul>
+				</div>
+
+				<div class="btns">
+					<button class="to-start">start</button>
+					<button class="to-stop">stop</button>
+					<button class="to-prev">prev</button>
+					<button class="to-next">next</button>
+
+					<div class="pages">
+						<button type="button">0</button>
+						<button type="button">1</button>
+						<button type="button">2</button>
+						<button type="button">3</button>
+						<button type="button">4</button>
+						<button type="button">5</button>
+					</div>
+				</div>
+
+				<script type="text/javascript">
+					var $s1 = $( '.section-1' );
+
+					$( '.section-1 .listWrap' ).paperSwipe({
+						$pages: $( '.section-1 .pages button' ),
+						$toStart: $( '.section-1 .to-start' ),
+						$toStop: $( '.section-1 .to-stop' ),
+						$toPrev: $( '.section-1 .to-prev' ),
+						$toNext: $( '.section-1 .to-next' ),
+						// isSnap: false,
+						create: function( ) {
+							$s1.find( 'span.ststus-display' ).text( 'create' );
+						},
+						active: function( idx ) {
+							$s1.find( 'span.ststus-display' ).text( idx );
+						}
+					});
+				</script>
+			</section>
+
+			<!-- // snap -->
+			<!-- <section class="section-3">
+				<header>
+					<h1>Default</h1>
+					<h2>status: <span class="ststus-display">0</span></h2>
+				</header>
+
+				<div class="listWrap">
+					<ul class="list">
+						<li><div style="background: red;">0</div></li>
+						<li><div style="background: brown;">1</div></li>
+						<li><div style="background: orange;">2</div></li>
+						<li><div style="background: green;">3</div></li>
+						<li><div style="background: blue;">4</div></li>
+						<li><div style="background: purple;">5</div></li>
+					</ul>
+				</div>
+
+				<div class="btns">
+					<button id="start-1">start</button>
+					<button id="stop-1">stop</button>
+					<button id="prev-1">prev</button>
+					<button id="next-1">next</button>
+					<br />
+					<button id="to0-1">to 0</button>
+					<button id="to1-1">to 1</button>
+					<button id="to2-1">to 2</button>
+					<button id="to3-1">to 3</button>
+					<button id="to4-1">to 4</button>
+					<button id="to5-1">to 5</button>
+				</div>
+
+				<script type="text/javascript">
+					var $s1 = $( '.section-3' );
+					var a1 = new BasePaper( {
+						elem: $s1.find( '.listWrap' ),
+						list: $s1.find( '.list' ),
+						node: $s1.find( '.list li' ),
+						create: function( ) {
+							$s1.find( 'span.ststus-display' ).text( 'create' );
+						},
+						active: function( idx ) {
+							$s1.find( 'span.ststus-display' ).text( idx );
+						}
+					} );
+
+					$( '#start-1' ).on( 'click', a1.startSlideShow );
+					$( '#stop-1' ).on( 'click', a1.stopSlideShow );
+					$( '#prev-1' ).on( 'click', a1.toPrev );
+					$( '#next-1' ).on( 'click', a1.toNext );
+					$( '#to0-1' ).on( 'click', function( ) {
+						a1.toSlide( 0 );
+					} );
+					$( '#to1-1' ).on( 'click', function( ) {
+						a1.toSlide( 1 );
+					} );
+					$( '#to2-1' ).on( 'click', function( ) {
+						a1.toSlide( 2 );
+					} );
+					$( '#to3-1' ).on( 'click', function( ) {
+						a1.toSlide( 3 );
+					} );
+					$( '#to4-1' ).on( 'click', function( ) {
+						a1.toSlide( 4 );
+					} );
+					$( '#to5-1' ).on( 'click', function( ) {
+						a1.toSlide( 5 );
+					} );
+				</script>
+			</section> -->
+			<!-- snap // -->
+
+			<!-- // javascript -->
+			<!-- <section class="section-4">
+				<header>
+					<h1>Snap Off</h1>
+					<h2>status: <span class="ststus-display">0</span></h2>
+				</header>
+
+				<div class="listWrap">
+					<ul class="list">
+						<li><div style="background: red;">0</div></li>
+						<li><div style="background: brown;">1</div></li>
+						<li><div style="background: orange;">2</div></li>
+						<li><div style="background: green;">3</div></li>
+						<li><div style="background: blue;">4</div></li>
+						<li><div style="background: purple;">5</div></li>
+					</ul>
+				</div>
+
+				<div class="btns">
+					<button id="start-2">start</button>
+					<button id="stop-2">stop</button>
+					<button id="prev-2">prev</button>
+					<button id="next-2">next</button>
+					<br />
+					<button id="to0-2">to 0</button>
+					<button id="to1-2">to 1</button>
+					<button id="to2-2">to 2</button>
+					<button id="to3-2">to 3</button>
+					<button id="to4-2">to 4</button>
+					<button id="to5-2">to 5</button>
+				</div>
+
+				<script type="text/javascript">
+					var $s2 = $( '.section-4' );
+					var a2 = new BasePaper( {
+						snap: false,
+						elem: $s2.find( '.listWrap' ),
+						list: $s2.find( '.list' ),
+						node: $s2.find( '.list li' ),
+						create: function( ) {
+							$s2.find( 'span.ststus-display' ).text( 'create' );
+						},
+						active: function( idx ) {
+							$s2.find( 'span.ststus-display' ).text( idx );
+						}
+					} );
+
+					$( '#start-2' ).on( 'click', a2.startSlideShow );
+					$( '#stop-2' ).on( 'click', a2.stopSlideShow );
+					$( '#prev-2' ).on( 'click', a2.toPrev );
+					$( '#next-2' ).on( 'click', a2.toNext );
+					$( '#to0-2' ).on( 'click', function( ) {
+						a2.toSlide( 0 );
+					} );
+					$( '#to1-2' ).on( 'click', function( ) {
+						a2.toSlide( 1 );
+					} );
+					$( '#to2-2' ).on( 'click', function( ) {
+						a2.toSlide( 2 );
+					} );
+					$( '#to3-2' ).on( 'click', function( ) {
+						a2.toSlide( 3 );
+					} );
+					$( '#to4-2' ).on( 'click', function( ) {
+						a2.toSlide( 4 );
+					} );
+					$( '#to5-2' ).on( 'click', function( ) {
+						a2.toSlide( 5 );
+					} );
+				</script>
+			</section> -->
+			<!-- javascript // -->
+
+		</div>
+		<!-- example // -->
+
+		<!-- use -->
+		<div class="use wrap">
+			<header>
+				<h1>How to Use</h1>
+			</header>
+
+			<section>
+				<header>
+					<h1>Method</h1>
+				</header>
+
+				<table summary="Method table">
+					<colgroup>
+						<col width="30%" />
+						<col width="70%" />
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="col">toPrev</th>
+							<td>이전 슬라이더 이동</td>
+						</tr>
+						<tr>
+							<th scope="col">toNext</th>
+							<td>다음 슬라이더 이동</td>
+						</tr>
+
+						<tr>
+							<th scope="col">toSlide( index )</th>
+							<td>지정된 슬라이더 이동</td>
+						</tr>
+
+						<tr>
+							<th scope="col">getPos</th>
+							<td>현재 슬라이더 인덱스</td>
+						</tr>
+						<tr>
+							<th scope="col">startSlideShow</th>
+							<td>슬라이더쇼 멈춤</td>
+						</tr>
+						<tr>
+							<th scope="col">stopSlideShow</th>
+							<td>슬라이더쇼 시작</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+
+			<section>
+				<header>
+					<h1>Option</h1>
+				</header>
+
+				<table summary="Option table">
+					<colgroup>
+						<col width="30%" />
+						<col width="70%" />
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="col" rowspan="2">elem</th>
+							<td>
+								<em class="required">required.</em>
+								<span class="type"><em>Type:</em> Selector or jQuery or Element</span>
+							</td>
+						</tr>
+						<tr>
+							<td>바깥 감싸는 DOM Element</td>
+						</tr>
+
+						<tr>
+							<th scope="col" rowspan="2">list</th>
+							<td>
+								<em class="required">required.</em>
+								<span class="type"><em>Type:</em> Selector or jQuery or Element</span>
+							</td>
+						</tr>
+						<tr>
+							<td>슬라이더를 감싸는 DOM Element(ex: ul, dt 태그)</td>
+						</tr>
+
+						<tr>
+							<th scope="col" rowspan="2">node</th>
+							<td>
+								<em class="required">required.</em>
+								<span class="type"><em>Type:</em> Selector or jQuery or Element</span>
+							</td>
+						</tr>
+						<tr>
+							<td>슬라이더 DOM Elements(ex: li, dd 태그)</td>
+						</tr>
+
+						<tr>
+							<th scope="col" rowspan="2">speed</th>
+							<td><span class="type"><em>Type</em>: Integer (default: 400)</span></td>
+						</tr>
+						<tr>
+							<td>슬라이더간 움직인 시간</td>
+						</tr>
+
+						<tr>
+							<th scope="col" rowspan="2">range</th>
+							<td><span class="type"><em>Type</em>: Integer (default:10)</span></td>
+						</tr>
+						<tr>
+							<td>사용자 터치시, 터치 시작부터 끝날때 까지 거리가 일정 거리 이상이면 다음(혹은 이전) 슬라이더로 넘어갈때의 비율(백분율)</td>
+						</tr>
+
+						<tr>
+							<th scope="col" rowspan="2">loop</th>
+							<td><span class="type"><em>Type</em>: Boolean (default: true)</span></td>
+						</tr>
+						<tr>
+							<td>루프 여부. false로 설정되면 마지막(처음) 슬라이더에서 처음(마지막) 슬라이더로 이동 안함</td>
+						</tr>
+
+						<tr>
+							<th scope="col" rowspan="2">slideShowTime</th>
+							<td><span class="type"><em>Type</em>: Boolean or Integer (default: 3000)</span></td>
+						</tr>
+						<tr>
+							<td>슬라이더쇼 시간</td>
+						</tr>
+
+						<tr>
+							<th scope="col" rowspan="2">snap</th>
+							<td><span class="type"><em>Type</em>: Boolean (default: true)</span></td>
+						</tr>
+						<tr>
+							<td>snap 기능</td>
+						</tr>
+
+						<tr>
+							<th scope="col" rowspan="2">create</th>
+							<td><span class="type"><em>Type</em>: Function</span></td>
+						</tr>
+						<tr>
+							<td>생성시 콜백 함수</td>
+						</tr>
+
+						<tr>
+							<th scope="col" rowspan="2">active</th>
+							<td><span class="type"><em>Type</em>: Function</span></td>
+						</tr>
+						<tr>
+							<td>슬라이더 이동 후 콜백 함수</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</div>
+		<!-- use // -->
+
+	</main>
+
+	<footer class="wrap-footer">
+		<address>copyright <a href="http://blim.mit-license.org/" target="_blank">http://blim.mit-license.org/</a></address>
+	</footer>
+</body>
+</html>

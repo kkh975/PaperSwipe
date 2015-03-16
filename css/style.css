@@ -1,0 +1,45 @@
+@charset "utf-8";
+
+/**
+ * @date 2013-07-04
+ * @author Koo Chi Hoon(kkh975@naver.com)
+ */
+
+.ex .listWrap {
+	margin: 0px auto;
+	margin-top: 5px;
+	width: 300px; /* You must have a attribute! */
+	height: 100px; /* You must have a attribute! */
+	background: #f7f7f7;
+}
+.ex .list {
+/*	margin-left: 50%;
+	padding: 10px 5px;*/
+}
+.ex .list li {
+	width: 100px; /* You must have a attribute! */
+	height: 100px; /* You must have a attribute! */
+	margin-left: -55px;
+	padding: 0px 5px;
+}
+.ex .list li div {
+	width: 100%;
+	height: 100%;
+	line-height: 100px;
+	text-align: center;
+	font-size: 30px;
+	color: #fff;
+}
+.ex .btns {
+	text-align: center;
+}
+.ex .btns button {
+	width: 50px;
+	margin-top: 6px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	background: #efefef;
+	border: 1px solid #b3b3b3;
+	border-radius: 2px;
+	letter-spacing: -1px;
+}
