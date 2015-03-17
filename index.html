@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>PaperSwipe</title>
+	<meta name="Author" content="Koo Chi Hoon(kkh975@naver.com)">
+	<meta name="keywords" content="PaperSwipe" />
+	<meta http-equiv="Cashe-Control" content="no-cache" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
+	<link rel="stylesheet" href="css/style.css" />
+	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="js/PaperSwipe.js"></script>
+</head>
+<body>
+
+	<main>
+		<!-- example -->
+		<div class="ex wrap">
+			<header>
+				<h1>Example</h1>
+			</header>
+
+			<!-- Default -->
+			<section class="section-1">
+				<header>
+					<h1>Default</h1>
+					<h2>status: <span class="ststus-display">0</span></h2>
+				</header>
+
+				<div class="listWrap">
+					<ul class="list">
+						<li><div style="background: red; width: 200px;">0</div></li>
+						<li><div style="background: brown; width: 50px;">1</div></li>
+						<li><div style="background: orange; ">2</div></li>
+						<li><div style="background: green; width: 150px;">3</div></li>
+						<li><div style="background: blue;">4</div></li>
+						<li><div style="background: purple; width: 50px;">5</div></li>
+					</ul>
+				</div>
+
+				<div class="btns">
+					<button type="button" class="to-start">start</button>
+					<button type="button" class="to-stop">stop</button>
+					<button type="button" class="to-prev">prev</button>
+					<button type="button" class="to-next">next</button>
+
+					<div class="pages">
+						<button type="button">0</button>
+						<button type="button">1</button>
+						<button type="button">2</button>
+						<button type="button">3</button>
+						<button type="button">4</button>
+						<button type="button">5</button>
+					</div>
+				</div>
+
+				<script type="text/javascript">
+					var $s1 = $( '.section-1' );
+
+					$( '.section-1 .listWrap' ).paperSwipe({
+						$pages: $( '.section-1 .pages button' ),
+						$toStart: $( '.section-1 .to-start' ),
+						$toStop: $( '.section-1 .to-stop' ),
+						$toPrev: $( '.section-1 .to-prev' ),
+						$toNext: $( '.section-1 .to-next' ),
+						// isSnap: false,
+						create: function(){
+							$s1.find( 'span.ststus-display' ).text( 'create' );
+						},
+						active: function( idx ){
+							$s1.find( 'span.ststus-display' ).text( idx );
+						}
+					});
+				</script>
+			</section>
+
+			<!-- snap -->
+			<section class="section-2">
+				<header>
+					<h1>Default</h1>
+					<h2>status: <span class="ststus-display">0</span></h2>
+				</header>
+
+				<div class="listWrap">
+					<ul class="list">
+						<li><div style="background: red;">0</div></li>
+						<li><div style="background: brown;">1</div></li>
+						<li><div style="background: orange;">2</div></li>
+						<li><div style="background: green;">3</div></li>
+						<li><div style="background: blue;">4</div></li>
+						<li><div style="background: purple;">5</div></li>
+					</ul>
+				</div>
+
+				<div class="btns">
+					<button id="start-1">start</button>
+					<button id="stop-1">stop</button>
+					<button id="prev-1">prev</button>
+					<button id="next-1">next</button>
+					<br />
+					<button id="to0-1">to 0</button>
+					<button id="to1-1">to 1</button>
+					<button id="to2-1">to 2</button>
+					<button id="to3-1">to 3</button>
+					<button id="to4-1">to 4</button>
+					<button id="to5-1">to 5</button>
+				</div>
+
+				<script type="text/javascript">
+					var $s1 = $( '.section-2' );
+					var a1 = new BasePaper({
+						elem: $s1.find( '.listWrap' ),
+						list: $s1.find( '.list' ),
+						node: $s1.find( '.list li' ),
+						create: function(){
+							$s1.find( 'span.ststus-display' ).text( 'create' );
+						},
+						active: function( idx ){
+							$s1.find( 'span.ststus-display' ).text( idx );
+						}
+					});
+
+					$( '#start-1' ).on( 'click', a1.startSlideShow );
+					$( '#stop-1' ).on( 'click', a1.stopSlideShow );
+					$( '#prev-1' ).on( 'click', a1.toPrev );
+					$( '#next-1' ).on( 'click', a1.toNext );
+					$( '#to0-1' ).on( 'click', function(){
+						a1.toSlide( 0 );
+					});
+					$( '#to1-1' ).on( 'click', function(){
+						a1.toSlide( 1 );
+					});
+					$( '#to2-1' ).on( 'click', function(){
+						a1.toSlide( 2 );
+					});
+					$( '#to3-1' ).on( 'click', function(){
+						a1.toSlide( 3 );
+					});
+					$( '#to4-1' ).on( 'click', function(){
+						a1.toSlide( 4 );
+					});
+					$( '#to5-1' ).on( 'click', function(){
+						a1.toSlide( 5 );
+					});
+				</script>
+			</section>
+
+			<!-- javascript -->
+			<section class="section-3">
+				<header>
+					<h1>Snap Off</h1>
+					<h2>status: <span class="ststus-display">0</span></h2>
+				</header>
+
+				<div class="listWrap">
+					<ul class="list">
+						<li><div style="background: red;">0</div></li>
+						<li><div style="background: brown;">1</div></li>
+						<li><div style="background: orange;">2</div></li>
+						<li><div style="background: green;">3</div></li>
+						<li><div style="background: blue;">4</div></li>
+						<li><div style="background: purple;">5</div></li>
+					</ul>
+				</div>
+
+				<div class="btns">
+					<button id="start-2">start</button>
+					<button id="stop-2">stop</button>
+					<button id="prev-2">prev</button>
+					<button id="next-2">next</button>
+					<br />
+					<button id="to0-2">to 0</button>
+					<button id="to1-2">to 1</button>
+					<button id="to2-2">to 2</button>
+					<button id="to3-2">to 3</button>
+					<button id="to4-2">to 4</button>
+					<button id="to5-2">to 5</button>
+				</div>
+
+				<script type="text/javascript">
+					var $s2 = $( '.section-3' );
+					var a2 = new BasePaper({
+						snap: false,
+						elem: $s2.find( '.listWrap' ),
+						list: $s2.find( '.list' ),
+						node: $s2.find( '.list li' ),
+						create: function(){
+							$s2.find( 'span.ststus-display' ).text( 'create' );
+						},
+						active: function( idx ){
+							$s2.find( 'span.ststus-display' ).text( idx );
+						}
+					});
+
+					$( '#start-2' ).on( 'click', a2.startSlideShow );
+					$( '#stop-2' ).on( 'click', a2.stopSlideShow );
+					$( '#prev-2' ).on( 'click', a2.toPrev );
+					$( '#next-2' ).on( 'click', a2.toNext );
+					$( '#to0-2' ).on( 'click', function(){
+						a2.toSlide( 0 );
+					});
+					$( '#to1-2' ).on( 'click', function(){
+						a2.toSlide( 1 );
+					});
+					$( '#to2-2' ).on( 'click', function(){
+						a2.toSlide( 2 );
+					});
+					$( '#to3-2' ).on( 'click', function(){
+						a2.toSlide( 3 );
+					});
+					$( '#to4-2' ).on( 'click', function(){
+						a2.toSlide( 4 );
+					});
+					$( '#to5-2' ).on( 'click', function(){
+						a2.toSlide( 5 );
+					});
+				</script>
+			</section>
+
+		</div>
+		<!-- example // -->
+	</main>
+
+	<footer class="wrap-footer">
+		<address>copyright <a href="http://blim.mit-license.org/" target="_blank">http://blim.mit-license.org/</a></address>
+		<p><a href="http://www.blim.co.kr">http://www.blim.co.kr</a></p>
+	</footer>
+</body>
+</html>
