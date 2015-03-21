@@ -1,8 +1,10 @@
-BaseSwipe
+SwipePaper
 =========
 
 ##Introduce
-구글 앱 스토어, 애플 앱 스토어 등에서 화면 미리보기 영역에서 주로 사용되는 플리킹 플러그인입니다. 자바스크립트와 jQuery 동시에 지원하며 시작위치 지정, 슬라이더의 페이징 기능등 많이 사용되어지는 기능을 넣었습니다.
+구글 앱 스토어, 애플 앱 스토어 등에서 화면 미리보기 영역에서 주로 사용되는 플리킹 플러그인입니다. jQuery plugin을 지원하며 시작위치 지정, 슬라이더의 페이징 기능등이 있습니다.
+
+[Demo](https://kkh975.github.io/SwipePaper)
 
 ##How to Use
 ####html
@@ -21,11 +23,11 @@ BaseSwipe
 아래와 같이 길이와 높이값을 반드시 기입해야 합니다.
 ```css
 .listWrap {
-	width: 100%;
+	width: 200px;
 	height: 100px;
 }
 .list li {
-	width: 100%;
+	width: 200px;
 	height: 100px;
 }
 ```
@@ -33,15 +35,15 @@ BaseSwipe
 ####javascript
 jquery 플러그인을 작성할 경우 아래와 같이 작성합니다.
 ```javascript
-$( '.listWrap' ).baseSwipe( );
+$( '.listWrap' ).swipePaper();
 ```
 
 javascript으로 작성할 경우 아래와 같이 작성합니다.
 ```javascript
-new BaseSwipe( {
+new SwipePaper({
 	wrap: document.querySelectorAll( '.listWrap' )[ 0 ],
 	list: document.querySelectorAll( '.listWrap li' ),
-} );
+});
 ```
 
 ##method

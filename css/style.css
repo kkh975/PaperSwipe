@@ -9,8 +9,6 @@ body { min-width: 320px; font-family: Helvetica, sans-serif; font-size: 12px; co
 li, dd { list-style: none; }
 section, footer, address, main, header { display: block; }
 
-<<<<<<< HEAD
-=======
 /* header */
 header.wrap-header {
 	margin-top:20px;
@@ -24,7 +22,6 @@ header.wrap-header p {
 	margin-top:10px;
 }
 
->>>>>>> gh-pages
 /* footer */
 footer.wrap-footer {
 	clear: both;
@@ -78,13 +75,13 @@ footer.wrap-footer address a {
 .ex .listWrap {
 	margin: 0px auto;
 	margin-top: 5px;
-	width: 300px; /* required */
-	height: 100px; /* required */
+	width: 300px; 	/* required */
+	height: 100px;	/* required */
 	background: #f7f7f7;
 }
 .ex .list li {
-	width: 100px; /* required */
-	height: 100px; /* required */
+	width: 100px;	/* required */
+	height: 100px;	/* required */
 	margin-left: -55px;
 	padding: 0px 5px;
 }
