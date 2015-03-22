@@ -25,7 +25,7 @@
 			</header>
 
 			<!-- Default -->
-			<section class="section-1">
+			<!-- <section class="section-1">
 				<header>
 					<h1>Default</h1>
 					<h2>status: <span class="ststus-display">0</span></h2>
@@ -33,12 +33,36 @@
 
 				<div class="listWrap">
 					<ul class="list">
-						<li><div style="background: red; width: 200px;">0</div></li>
-						<li><div style="background: brown; width: 50px;">1</div></li>
-						<li><div style="background: orange; ">2</div></li>
-						<li><div style="background: green; width: 150px;">3</div></li>
-						<li><div style="background: blue;">4</div></li>
-						<li><div style="background: purple; width: 50px;">5</div></li>
+						<li>
+							<div style="background: red; width: 200px;">
+								<a href="">0</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: brown; width: 50px;">
+								<a href="">1</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: orange; ">
+								<a href="">2</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: green; width: 150px;">
+								<a href="">3</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: blue;">
+								<a href="">4</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: purple; width: 50px;">
+								<a href="">5</a>
+							</div>
+						</li>
 					</ul>
 				</div>
 
@@ -59,27 +83,25 @@
 				</div>
 
 				<script type="text/javascript">
-					var $s1 = $( '.section-1' );
-
 					$( '.section-1 .listWrap' ).swipePaper({
 						$pages: $( '.section-1 .pages button' ),
 						$toStart: $( '.section-1 .to-start' ),
 						$toStop: $( '.section-1 .to-stop' ),
 						$toPrev: $( '.section-1 .to-prev' ),
 						$toNext: $( '.section-1 .to-next' ),
-						// isSnap: false,
+						loop: false,
 						create: function(){
-							$s1.find( 'span.ststus-display' ).text( 'create' );
+							$( '.section-1 span.ststus-display' ).text( 'create' );
 						},
 						active: function( idx ){
-							$s1.find( 'span.ststus-display' ).text( idx );
+							$( '.section-1 span.ststus-display' ).text( idx );
 						}
 					});
 				</script>
-			</section>
+			</section> -->
 
 			<!-- snap -->
-			<section class="section-2">
+			<!-- <section class="section-2">
 				<header>
 					<h1>Default</h1>
 					<h2>status: <span class="ststus-display">0</span></h2>
@@ -87,67 +109,72 @@
 
 				<div class="listWrap">
 					<ul class="list">
-						<li><div style="background: red;">0</div></li>
-						<li><div style="background: brown;">1</div></li>
-						<li><div style="background: orange;">2</div></li>
-						<li><div style="background: green;">3</div></li>
-						<li><div style="background: blue;">4</div></li>
-						<li><div style="background: purple;">5</div></li>
+						<li>
+							<div style="background: red;">
+								<a href="">0</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: brown;">
+								<a href="">1</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: orange;">
+								<a href="">2</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: green;">
+								<a href="">3</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: blue;">
+								<a href="">4</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: purple;">
+								<a href="">5</a>
+							</div>
+						</li>
 					</ul>
 				</div>
 
 				<div class="btns">
-					<button id="start-1">start</button>
-					<button id="stop-1">stop</button>
-					<button id="prev-1">prev</button>
-					<button id="next-1">next</button>
-					<br />
-					<button id="to0-1">to 0</button>
-					<button id="to1-1">to 1</button>
-					<button id="to2-1">to 2</button>
-					<button id="to3-1">to 3</button>
-					<button id="to4-1">to 4</button>
-					<button id="to5-1">to 5</button>
+					<button type="button" class="to-start">start</button>
+					<button type="button" class="to-stop">stop</button>
+					<button type="button" class="to-prev">prev</button>
+					<button type="button" class="to-next">next</button>
+
+					<div class="pages">
+						<button type="button">0</button>
+						<button type="button">1</button>
+						<button type="button">2</button>
+						<button type="button">3</button>
+						<button type="button">4</button>
+						<button type="button">5</button>
+					</div>
 				</div>
 
 				<script type="text/javascript">
-					var $s1 = $( '.section-2' );
-					var a1 = new BasePaper({
-						elem: $s1.find( '.listWrap' ),
-						list: $s1.find( '.list' ),
-						node: $s1.find( '.list li' ),
+					$( '.section-2 .listWrap' ).swipePaper({
+						$pages: $( '.section-2 .pages button' ),
+						$toStart: $( '.section-2 .to-start' ),
+						$toStop: $( '.section-2 .to-stop' ),
+						$toPrev: $( '.section-2 .to-prev' ),
+						$toNext: $( '.section-2 .to-next' ),
+						loop: false,
 						create: function(){
-							$s1.find( 'span.ststus-display' ).text( 'create' );
+							$( '.section-2 span.ststus-display' ).text( 'create' );
 						},
 						active: function( idx ){
-							$s1.find( 'span.ststus-display' ).text( idx );
+							$( '.section-2 span.ststus-display' ).text( idx );
 						}
 					});
-
-					$( '#start-1' ).on( 'click', a1.startSlideShow );
-					$( '#stop-1' ).on( 'click', a1.stopSlideShow );
-					$( '#prev-1' ).on( 'click', a1.toPrev );
-					$( '#next-1' ).on( 'click', a1.toNext );
-					$( '#to0-1' ).on( 'click', function(){
-						a1.toSlide( 0 );
-					});
-					$( '#to1-1' ).on( 'click', function(){
-						a1.toSlide( 1 );
-					});
-					$( '#to2-1' ).on( 'click', function(){
-						a1.toSlide( 2 );
-					});
-					$( '#to3-1' ).on( 'click', function(){
-						a1.toSlide( 3 );
-					});
-					$( '#to4-1' ).on( 'click', function(){
-						a1.toSlide( 4 );
-					});
-					$( '#to5-1' ).on( 'click', function(){
-						a1.toSlide( 5 );
-					});
 				</script>
-			</section>
+			</section> -->
 
 			<!-- javascript -->
 			<section class="section-3">
@@ -158,69 +185,79 @@
 
 				<div class="listWrap">
 					<ul class="list">
-						<li><div style="background: red;">0</div></li>
-						<li><div style="background: brown;">1</div></li>
-						<li><div style="background: orange;">2</div></li>
-						<li><div style="background: green;">3</div></li>
-						<li><div style="background: blue;">4</div></li>
-						<li><div style="background: purple;">5</div></li>
+						<li>
+							<div style="background: red;">
+								<a href="">0</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: brown;">
+								<a href="">1</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: orange;">
+								<a href="">2</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: green;">
+								<a href="">3</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: blue;">
+								<a href="">4</a>
+							</div>
+						</li>
+						<li>
+							<div style="background: purple;">
+								<a href="">5</a>
+							</div>
+						</li>
 					</ul>
 				</div>
 
 				<div class="btns">
-					<button id="start-2">start</button>
-					<button id="stop-2">stop</button>
-					<button id="prev-2">prev</button>
-					<button id="next-2">next</button>
-					<br />
-					<button id="to0-2">to 0</button>
-					<button id="to1-2">to 1</button>
-					<button id="to2-2">to 2</button>
-					<button id="to3-2">to 3</button>
-					<button id="to4-2">to 4</button>
-					<button id="to5-2">to 5</button>
+					<button type="button" class="to-start">start</button>
+					<button type="button" class="to-stop">stop</button>
+					<button type="button" class="to-prev">prev</button>
+					<button type="button" class="to-next">next</button>
+
+					<div class="pages">
+						<button type="button">0</button>
+						<button type="button">1</button>
+						<button type="button">2</button>
+						<button type="button">3</button>
+						<button type="button">4</button>
+						<button type="button">5</button>
+					</div>
 				</div>
 
 				<script type="text/javascript">
-					var $s2 = $( '.section-3' );
-					var a2 = new BasePaper({
-						snap: false,
-						elem: $s2.find( '.listWrap' ),
-						list: $s2.find( '.list' ),
-						node: $s2.find( '.list li' ),
+					var Dsec3 = document.querySelectorAll( '.section-3' )[ 0 ];
+					var Ddisp = Dsec3.querySelectorAll( 'span.ststus-display' )[ 0 ];
+					var Dlist = Dsec3.querySelectorAll( '.listWrap ul' )[ 0 ];
+					var slide = new SwipePaper({
+						wrap: Dlist,
+						list: Dlist.querySelectorAll( 'li' ),
+						pages: Dsec3.querySelectorAll( '.pages button' ),
+						toStart: Dsec3.querySelectorAll( '.to-start' ),
+						toStop: Dsec3.querySelectorAll( '.to-stop' ),
+						toPrev: Dsec3.querySelectorAll( '.to-prev' ),
+						toNext: Dsec3.querySelectorAll( '.to-next' ),
 						create: function(){
-							$s2.find( 'span.ststus-display' ).text( 'create' );
+							Ddisp.innerHTML = 'create';
 						},
-						active: function( idx ){
-							$s2.find( 'span.ststus-display' ).text( idx );
+						before: function(){
+							Ddisp.innerHTML = 'before move';
+						},
+						active: function(){
+							Ddisp.innerHTML = 'after move';
 						}
-					});
-
-					$( '#start-2' ).on( 'click', a2.startSlideShow );
-					$( '#stop-2' ).on( 'click', a2.stopSlideShow );
-					$( '#prev-2' ).on( 'click', a2.toPrev );
-					$( '#next-2' ).on( 'click', a2.toNext );
-					$( '#to0-2' ).on( 'click', function(){
-						a2.toSlide( 0 );
-					});
-					$( '#to1-2' ).on( 'click', function(){
-						a2.toSlide( 1 );
-					});
-					$( '#to2-2' ).on( 'click', function(){
-						a2.toSlide( 2 );
-					});
-					$( '#to3-2' ).on( 'click', function(){
-						a2.toSlide( 3 );
-					});
-					$( '#to4-2' ).on( 'click', function(){
-						a2.toSlide( 4 );
-					});
-					$( '#to5-2' ).on( 'click', function(){
-						a2.toSlide( 5 );
 					});
 				</script>
 			</section>
-
 		</div>
 		<!-- example // -->
 	</main>
