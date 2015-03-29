@@ -71,9 +71,6 @@
 	};
 }( jQuery ));
 
-
-// TODO, item의 width값이 다를 경우에 대해서 
-
  /*!*
  * @method: SwipePaper 함수
  */
@@ -95,11 +92,10 @@ var SwipePaper = function( __setting ){
 		slide_Show_Timer = null,
 		is_Slide_Show    = false,
 		is_Move          = false,
-		is_Snap          = false,
 		list_Width       = 0,
 		list_Len         = 0,
 		list_Pos         = 0,	// 현재 위치
-		list_Pos_Arr     = [],
+		list_Pos_Arr     = [],	// 각자의 위치
 		item_Width       = 0,
 		now_Idx          = 0,
 		to_Idx           = 0,
@@ -119,7 +115,7 @@ var SwipePaper = function( __setting ){
 		pageEvents: 'click',		// 페이징 작동 이벤트
 		slideShowTime: 3000,		// 슬라이드쇼 시간
 		touchMinumRange: 10,		// 터치시 최소 이동 거리
-		firstItemMinPos: 50,		// 처음 아이템의 최소 위치(퍼센트)]
+		firstItemMinPos: 50,		// 처음 아이템의 최소 위치(퍼센트)
 		lastItemMaxPos: 50,			// 마지막 아이템의 최대 위치(퍼센트)
 		loop: true,					// 무한 여부
 		isSnap: false,				// 스냅 여부
@@ -209,40 +205,31 @@ var SwipePaper = function( __setting ){
 		/**
 		 * @method: 전체 애니메이션 설정
 		 */
-		setListTransition: function( _speed, _add_pos, _is_set ){
-			var pos = list_Pos;
+		setListTransition: function( _speed, _to_pos, _is_set ){
+			// 현재 위치가 처음 슬라이더 위치를 벗어날 때
+			/*if ( pos > 0 ){
+				pos = 0;
+			} else if ( Math.abs( pos ) > item_Width * list_Len ){ // 현재 위치가 마지막 슬라이더 위치를 벗어날 때
+				pos = list_Width * list_Len;
+			}*/
+
+			/*
+			// 스냅기능 비활성화시, 현재 위치가 정확하게 떨어지지 않을 때 교정
+			else if ( pos % list_Width !== 0 ){
+
+				// 실제 위치해야할 위치값과 현재값의 차이를 더하거나 뻄
+				// 현재 슬라이드보다 작은 슬라이더 이동시는 더함
+				diff = Math.abs( pos ) - ( list_Width * _to_idx );
+				pos = diff < 0 ? pos + diff : pos - diff;
+			}
+			*/
+
+			// list_Pos = pos;
+
+			helper.setCss3Transition( D_Plist, _speed, _to_pos );
 
 			if ( _is_set ){
-
-				// 현재 위치가 처음 슬라이더 위치를 벗어날 때
-				/*if ( pos > 0 ){
-					pos = 0;
-				} else if ( Math.abs( pos ) > item_Width * list_Len ){ // 현재 위치가 마지막 슬라이더 위치를 벗어날 때
-					pos = list_Width * list_Len;
-				}*/
-
-				/*
-				// 스냅기능 비활성화시, 현재 위치가 정확하게 떨어지지 않을 때 교정
-				else if ( pos % list_Width !== 0 ){
-
-					// 실제 위치해야할 위치값과 현재값의 차이를 더하거나 뻄
-					// 현재 슬라이드보다 작은 슬라이더 이동시는 더함
-					diff = Math.abs( pos ) - ( list_Width * _to_idx );
-					pos = diff < 0 ? pos + diff : pos - diff;
-				}
-				*/
-
-				// list_Pos = pos;
-			}
-
-			if ( _add_pos ){
-				pos += _add_pos;
-			}
-
-			helper.setCss3Transition( D_Plist, _speed, pos );
-
-			if ( _is_set ){
-				list_Pos = pos;
+				list_Pos = _to_pos;
 			}
 		},
 
@@ -336,7 +323,8 @@ var SwipePaper = function( __setting ){
 		 */
 		setMove: function( e ){
 			var drag_dist = 0,
-				scroll_dist = 0;
+				scroll_dist = 0,
+				tmp_now_pos = 0;
 
 			if ( touchEvents.is_touch_start && e.type === "touchmove" && e.touches.length === 1 ){
 				drag_dist = e.touches[ 0 ].pageX - touchEvents.touch_start_x;		// 가로 이동 거리
@@ -344,7 +332,12 @@ var SwipePaper = function( __setting ){
 				touchEvents.move_dx = ( drag_dist / list_Width ) * 100;				// 가로 이동 백분률
 				
 				if ( Math.abs( drag_dist ) > Math.abs( scroll_dist )){ // 드래그길이가 스크롤길이 보다 클때
-					helper.setListTransition( 0, touchEvents.move_dx );
+
+					// TODO, 최소/최대 길이 생각하기
+					// TODO, snap기능 -> 걸리는 느낌나게 하기
+					touchEvents.move_dx = Math.max( -100, Math.min( 100, touchEvents.move_dx ));
+					tmp_now_pos = list_Pos + touchEvents.move_dx;
+					helper.setListTransition( 0, tmp_now_pos );
 				}
 				
 				e.preventDefault();
@@ -357,29 +350,31 @@ var SwipePaper = function( __setting ){
 		 */
 		setEnd: function( e ){
 			var to_idx = 0,
-				to_slide = 0,
 				tmp_now_pos = 0;
 
 			if ( touchEvents.is_touch_start && e.type === 'touchend' ){
 				tmp_now_pos = list_Pos + touchEvents.move_dx;
-				to_idx = Math.round( tmp_now_pos / list_Width );
-				to_idx = to_idx * -1;
+				to_idx = getNowIdxByPos( tmp_now_pos );
 
 				// 이전이나 이후로 가려면 is_Move해제 후 이동
 				is_Move = false;
 
 				// 스냅기능 활성화시
-				if ( is_Snap ){
-
-					// 이동할 거리가 기준보다 클때
-					if ( Math.abs( touchEvents.move_dx ) > setting.touchMinumRange ){
-						toSlide( to_idx );
+				if ( setting.isSnap ){
+					// 동일한 슬라이드내에서는 toSlide 작동하지 않아 바로 실행하도록
+					if ( getNowIdx() === to_idx ){
+						setToIdx( to_idx );
+						toSlideAnimateBefore();
+						toSlideAnimate( setting.duration );
 					} else {
-						toSlideAnimate();
+						toSlide( to_idx );
 					}
 				} else {
-					setNowIdx( to_idx );
-					helper.setListTransition( 0, touchEvents.move_dx, true );
+					helper.setListTransition( 0, tmp_now_pos, true );
+
+					// trnstion이 0이기 때문에 toSlideAnimateAfter 발생안에서 강제 실행
+					setToIdx( to_idx );
+					toSlideAnimateAfter();
 				}
 			}
 
@@ -504,15 +499,22 @@ var SwipePaper = function( __setting ){
 		D_Plist.style.cssText = css_text;
 
 		// node
-		for ( var i = 0, len = list_Len, width = 0, css_text = ''; i < len; i++ ){
-			list_Pos_Arr.push( D_List[ i ].offsetWidth );
+		for ( var i = 0, len = list_Len, sumW = 0, w = 0, ml = 0, mr = 0, css_text = ''; i < len; i++ ){
+			w = D_List[ i ].offsetWidth;
+			ml = parseFloat( window.getComputedStyle( D_List[ i ] ).marginLeft );
+			mr = parseFloat( window.getComputedStyle( D_List[ i ] ).marginRight );
+
+			list_Pos_Arr.push( (( sumW + ml ) / list_Width ) * 100 );
 
 			css_text = "position: absolute; ";
 			css_text += "top: 0px; ";
-			css_text += "left: " + width + "px; ";
+			css_text += "left: " + ( sumW + ml ) + "px; ";
+			css_text += "width: " + w + "px; ";
+			css_text += "margin-left: 0px; ";
+			css_text += "margin-right: 0px; ";
 			D_List[ i ].style.cssText = css_text;
 
-			width += list_Pos_Arr[ i ];
+			sumW += ( w + ml + mr );
 		}
 
 		startSlideShow();
@@ -559,7 +561,19 @@ var SwipePaper = function( __setting ){
 	 */
 	function resizeView(){
 		list_Width = D_Wrap.offsetWidth;	
-		item_Width = D_List[ 0 ].offsetWidth;	
+
+		for ( var i = 0, len = list_Len, w = 0, ml = 0, mr = 0; i < len; i++ ){
+			w = D_List[ i ].offsetWidth;
+			ml = parseFloat( window.getComputedStyle( D_List[ i ] ).marginLeft );
+			mr = parseFloat( window.getComputedStyle( D_List[ i ] ).marginRight );
+
+			list_Pos_Arr.push( (( sumW + ml ) / list_Width ) * 100 );
+
+			D_List[ i ].style.left = ( sumW + ml ) + "px";
+			D_List[ i ].style.width = w + "px";
+
+			sumW += ( w + ml + mr );
+		}
 	}
 
 	/**
@@ -575,6 +589,46 @@ var SwipePaper = function( __setting ){
 	 */
 	function setNowIdx( _now_idx ){
 		now_Idx = _now_idx;
+	}
+
+	/**
+	 * @method: 현재 슬라이드 번호 가져오기
+	 */
+	function getNowIdxByPos( _pos ){
+		var idx = 0,
+			pos = Math.abs( _pos ? _pos : list_Pos ),
+			len = list_Pos_Arr.length;
+
+		// 처음일경우
+		if ( list_Pos_Arr[ 1 ] > pos ){
+			return 0;
+		}
+
+		// 마지막일 경우
+		if ( list_Pos_Arr[ len - 1 ] < pos ){
+			return len - 1;
+		}
+
+		// 나머지는, 각 범위안에 들어가는지 
+ 		for ( var i = 1, len = len - 1; i < len; i++ ){
+ 			if ( list_Pos_Arr[ i ] <= pos && list_Pos_Arr[ i + 1 ] > pos ){
+				return i;
+ 			}
+		}
+	}
+
+	/**
+	 * @method: 이동할 포지션 얻기
+	 */
+	function getToIdx(){
+		return to_Idx;
+	}
+
+	/**
+	 * @method: 이동할 포지션 셋팅
+	 */
+	function setToIdx( _to_idx ){
+		to_Idx = _to_idx;
 	}
 
 	/**
@@ -607,20 +661,14 @@ var SwipePaper = function( __setting ){
 	 * @method: 이전 슬라이드 이동
 	 */
 	function toPrev(){
-		toSlide( getPrevIdx(), 'prev' );
-		// var now_idx = getNowIdx();
-
-		// toSlide( --now_idx );
+		toSlide( getPrevIdx() );
 	}
 
 	/**
 	 * @method: 이후 슬라이드 이동
 	 */
 	function toNext(){
-		toSlide( getNextIdx(), 'next' );
-		// var now_idx = getNowIdx();
-		
-		// toSlide( ++now_idx );
+		toSlide( getNextIdx() );
 	}
 
 	/**
@@ -630,7 +678,7 @@ var SwipePaper = function( __setting ){
 	function toSlide( _to_idx ){
 		var now_idx = getNowIdx(),
 			gap = _to_idx - now_idx,
-			pos = 0;
+			is_direct_access = arguments.length === 1;
 		
 		if ( is_Move ){ // 이동중이면 함수 종료
 			return false;
@@ -644,15 +692,9 @@ var SwipePaper = function( __setting ){
 			return false;
 		}
 
-		// 현재 위치에 이동할 위치
-		// pos = gap * item_Width;
-		// pos = pos * -1;
-
-		pos = pos - 100;
-
-		setNowIdx( _to_idx );
+		setToIdx( _to_idx );
 		toSlideAnimateBefore();
-		toSlideAnimate( setting.duration, pos );
+		toSlideAnimate( setting.duration );
 	}
 
 	/**
@@ -671,8 +713,8 @@ var SwipePaper = function( __setting ){
 	 * @param {Number} 추가 위치
 	 * @param {Number} 속도
 	 */
-	function toSlideAnimate( _time, _add_pos ){
-		helper.setListTransition( _time, _add_pos, true );
+	function toSlideAnimate( _time ){
+		helper.setListTransition( _time, list_Pos_Arr[ getToIdx() ] * -1, true );
 	}
 
 	/**
@@ -680,6 +722,7 @@ var SwipePaper = function( __setting ){
 	 * @param {Number} 속도
 	 */
 	function toSlideAnimateAfter( e ){
+		setNowIdx( getToIdx() );
 		setAnimateAfter();
 
 		if ( typeof setting.active === 'function' ){
@@ -714,7 +757,8 @@ var SwipePaper = function( __setting ){
 			toPrev: toPrev,
 			toSlide: toSlide
 		};
-	} else { // 미지원시
+	} else { 
+		// 미지원시, 최소한의 스크롤 보장
 		setInitStyle({
 			is_not_support: true
 		});

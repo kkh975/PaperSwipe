@@ -82,8 +82,7 @@ footer.wrap-footer address a {
 .ex .list li {
 	width: 100px;	/* required */
 	height: 100px;	/* required */
-	margin-left: -55px;
-	padding: 0px 5px;
+	margin-left: 5px;
 }
 .ex .list li > div {
 	width: 100%;

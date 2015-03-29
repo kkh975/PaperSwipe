@@ -25,7 +25,7 @@
 			</header>
 
 			<!-- Default -->
-			<!-- <section class="section-1">
+			<section class="section-1">
 				<header>
 					<h1>Default</h1>
 					<h2>status: <span class="ststus-display">0</span></h2>
@@ -33,13 +33,13 @@
 
 				<div class="listWrap">
 					<ul class="list">
-						<li>
-							<div style="background: red; width: 200px;">
+						<li style="width: 200px;">
+							<div style="background: red;">
 								<a href="">0</a>
 							</div>
 						</li>
-						<li>
-							<div style="background: brown; width: 50px;">
+						<li style="width: 50px;">
+							<div style="background: brown;">
 								<a href="">1</a>
 							</div>
 						</li>
@@ -48,8 +48,8 @@
 								<a href="">2</a>
 							</div>
 						</li>
-						<li>
-							<div style="background: green; width: 150px;">
+						<li style="width: 150px;">
+							<div style="background: green;">
 								<a href="">3</a>
 							</div>
 						</li>
@@ -58,8 +58,8 @@
 								<a href="">4</a>
 							</div>
 						</li>
-						<li>
-							<div style="background: purple; width: 50px;">
+						<li style="width: 50px;">
+							<div style="background: purple;">
 								<a href="">5</a>
 							</div>
 						</li>
@@ -98,10 +98,10 @@
 						}
 					});
 				</script>
-			</section> -->
+			</section>
 
 			<!-- snap -->
-			<!-- <section class="section-2">
+			<section class="section-2">
 				<header>
 					<h1>Default</h1>
 					<h2>status: <span class="ststus-display">0</span></h2>
@@ -174,7 +174,7 @@
 						}
 					});
 				</script>
-			</section> -->
+			</section>
 
 			<!-- javascript -->
 			<section class="section-3">
@@ -185,32 +185,32 @@
 
 				<div class="listWrap">
 					<ul class="list">
-						<li>
+						<li style="width:100px;">
 							<div style="background: red;">
 								<a href="">0</a>
 							</div>
 						</li>
-						<li>
+						<li style="width:150px;">
 							<div style="background: brown;">
 								<a href="">1</a>
 							</div>
 						</li>
-						<li>
+						<li style="width:50px;">
 							<div style="background: orange;">
 								<a href="">2</a>
 							</div>
 						</li>
-						<li>
+						<li style="width:100px;">
 							<div style="background: green;">
 								<a href="">3</a>
 							</div>
 						</li>
-						<li>
+						<li style="width:100px;">
 							<div style="background: blue;">
 								<a href="">4</a>
 							</div>
 						</li>
-						<li>
+						<li style="width:50px;">
 							<div style="background: purple;">
 								<a href="">5</a>
 							</div>
@@ -239,6 +239,9 @@
 					var Ddisp = Dsec3.querySelectorAll( 'span.ststus-display' )[ 0 ];
 					var Dlist = Dsec3.querySelectorAll( '.listWrap ul' )[ 0 ];
 					var slide = new SwipePaper({
+						firstItemMinPos: 30,
+						slideShowTime: 0,
+						isSnap: true,
 						wrap: Dlist,
 						list: Dlist.querySelectorAll( 'li' ),
 						pages: Dsec3.querySelectorAll( '.pages button' ),
@@ -249,11 +252,11 @@
 						create: function(){
 							Ddisp.innerHTML = 'create';
 						},
-						before: function(){
-							Ddisp.innerHTML = 'before move';
+						before: function( idx ){
+							Ddisp.innerHTML = 'before: ' + idx;
 						},
-						active: function(){
-							Ddisp.innerHTML = 'after move';
+						active: function( idx ){
+							Ddisp.innerHTML = 'after: ' + idx;
 						}
 					});
 				</script>
