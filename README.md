@@ -89,6 +89,13 @@ new SwipePaper({
 + before: {Function} (default: null) 슬라이더 이동 전 콜백 함수
 + active: {Function} (default: null) 슬라이더 이동 후 콜백 함수	
 
+##Troubleshooting
+[ISSUES](https://github.com/kkh975/SwipePaper/issues).
+
+##History
++ 2015-06-02: 세로 스크롤 시 오류 수정.
++ 2015-06-19: 슬라이드 이동중 터치 방지.
+
 Copyrights
 ----------
 - license: http://blim.mit-license.org/

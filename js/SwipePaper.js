@@ -10,18 +10,19 @@
 	 * @method: 슬라이더 플러그인
 	 */
 	$.fn.swipePaper = function( option ){
-		option.$list   = option.$list ? option.$list : $( this ).find( '> ul > li' );
-		option.$wrap   = option.$wrap ? option.$wrap : $( this ).find( '> ul' );
-		option.wrap    = option.$wrap ? option.$wrap.toArray() : [];
-		option.list    = option.$list ? option.$list.toArray() : [];
-		option.pages   = option.$pages ? option.$pages.toArray() : [];
-		option.toStart = option.$toStart ? option.$toStart.toArray() : [];
-		option.toStop  = option.$toStop ? option.$toStop.toArray() : [];
-		option.toPrev  = option.$toPrev ? option.$toPrev.toArray() : [];
-		option.toNext  = option.$toNext ? option.$toNext.toArray() : [];
+		option         = option || {};
+		option.$list   = option.$list || $( this ).find( '> ul > li' );
+		option.$wrap   = option.$wrap || $( this ).find( '> ul' );
+		option.wrap    = option.$wrap.toArray() || [];
+		option.list    = option.$list.toArray() || [];
+		option.pages   = ( option.$pages && option.$pages.toArray ) ? option.$pages.toArray() : [];
+		option.toStart = ( option.$toStart && option.$toStart.toArray ) ? option.$toStart.toArray() : [];
+		option.toStop  = ( option.$toStop && option.$toStop.toArray ) ? option.$toStop.toArray() : [];
+		option.toPrev  = ( option.$toPrev && option.$toPrev.toArray ) ? option.$toPrev.toArray() : [];
+		option.toNext  = ( option.$toNext && option.$toNext.toArray ) ? option.$toNext.toArray() : [];
 
 		return this.each( function(){
-			$( this ).data( 'slideSwipe', new SwipePaper( option ));
+			$( this ).data( 'SwipePaper', new SwipePaper( option ));
 		});
 	};
 
@@ -30,7 +31,7 @@
 	 */
 	$.fn.swipePaper2start = function(){
 		return this.each( function(){
-			$( this ).data( 'swipePaper' ).startSlideShow();
+			$( this ).data( 'SwipePaper' ).startSlideShow();
 		});
 	};
 
@@ -39,7 +40,7 @@
 	 */
 	$.fn.swipePaper2stop = function(){
 		return this.each( function(){
-			$( this ).data( 'swipePaper' ).stopSlideShow();
+			$( this ).data( 'SwipePaper' ).stopSlideShow();
 		});
 	};
 
@@ -48,7 +49,7 @@
 	 */
 	$.fn.swipePaper2prev = function(){
 		return this.each( function(){
-			$( this ).data( 'swipePaper' ).toPrev();
+			$( this ).data( 'SwipePaper' ).toPrev();
 		});
 	};
 
@@ -57,7 +58,7 @@
 	 */
 	$.fn.swipePaper2next = function(){
 		return this.each( function(){
-			$( this ).data( 'swipePaper' ).toNext();
+			$( this ).data( 'SwipePaper' ).toNext();
 		});
 	};
 
@@ -66,7 +67,7 @@
 	 */
 	$.fn.swipePaper2slide = function( _idx ){
 		return this.each( function(){
-			$( this ).data( 'swipePaper' ).toSlide( _idx );
+			$( this ).data( 'SwipePaper' ).toSlide( _idx );
 		});
 	};
 }( jQuery ));
@@ -94,39 +95,38 @@ var SwipePaper = function( __setting ){
 		is_Move          = false,
 		list_Width       = 0,
 		list_Len         = 0,
-		list_Pos         = 0,	// 현재 위치
-		list_Pos_Arr     = [],	// 각자의 위치
+		list_Pos         = 0,		// 현재 위치
+		list_Pos_Arr     = [],		// 각자의 위치
 		item_Width       = 0,
 		now_Idx          = 0,
 		to_Idx           = 0,
 		browser_Prefix   = {};
 
 	var default_Option = {
-		wrap: null,					// require, 리스트 감싸는 태그
-		list: null,					// require, 리스트
-		pages: null,				// 슬라이더 페이징 이동
-		toStart: null,				// 애니메이션 시작 버튼
-		toStop: null,				// 애니메이션 멈춤 버튼
-		toPrev: null,				// 이전 이동 버튼
-		toNext: null,				// 다음 이동 버튼
-		startEvents: 'click',		// 슬라이드쇼 시작 이벤트
-		stopEvents: 'click',		// 슬라이드쇼 정지 이벤트
-		moveEvents: 'click',		// 이동 작동 이벤트
-		pageEvents: 'click',		// 페이징 작동 이벤트
-		slideShowTime: 3000,		// 슬라이드쇼 시간
-		touchMinumRange: 10,		// 터치시 최소 이동 거리
-		firstItemMinPos: 50,		// 처음 아이템의 최소 위치(퍼센트)
-		lastItemMaxPos: 50,			// 마지막 아이템의 최대 위치(퍼센트)
-		loop: true,					// 무한 여부
-		isSnap: false,				// 스냅 여부
-		duration: 500,				// 애니메이션 시간
-		create: null,				// 생성 후 콜백함수
-		before: null,				// 액션 전 콜백함수
-		active: null				// 액션 후 콜백함수
+		wrap            : null,		// require, 리스트 감싸는 태그
+		list            : null,		// require, 리스트
+		pages           : null,		// 슬라이더 페이징 이동
+		toStart         : null,		// 애니메이션 시작 버튼
+		toStop          : null,		// 애니메이션 멈춤 버튼
+		toPrev          : null,		// 이전 이동 버튼
+		toNext          : null,		// 다음 이동 버튼
+		startEvents     : 'click',	// 슬라이드쇼 시작 이벤트
+		stopEvents      : 'click',	// 슬라이드쇼 정지 이벤트
+		moveEvents      : 'click',	// 이동 작동 이벤트
+		pageEvents      : 'click',	// 페이징 작동 이벤트
+		slideShowTime   : 3000,		// 슬라이드쇼 시간
+		touchMinumRange : 10,		// 터치시 최소 이동 거리
+		firstItemMinPos : 50,		// 처음 아이템의 최소 위치(퍼센트)
+		lastItemMaxPos  : 50,		// 마지막 아이템의 최대 위치(퍼센트)
+		loop            : true,		// 무한 여부
+		isSnap          : false,	// 스냅 여부
+		duration        : 400,		// 애니메이션 시간
+		create          : null,		// 생성 후 콜백함수
+		before          : null,		// 액션 전 콜백함수
+		active          : null		// 액션 후 콜백함수
 	};
 
-	var helper = { // 보조함수
-
+	var helper = { 
 		/**
 		 * @method: jQuery extend 기능
 		 */
@@ -145,18 +145,7 @@ var SwipePaper = function( __setting ){
 		 * @method: 배열 여부
 		 */
 		isArray: function( _arr ){
-			if ( _arr ){
-				return Object.prototype.toString.call( _arr ) === '[object Array]';
-			}
-
-			return false;
-		},
-
-		/**
-		 * @method: string trim
-		 */
-		trim: function( _txt ){
-			return _txt.replace( /(^\s*)|(\s*$)/gi, '' );
+			return _arr && Object.prototype.toString.call( _arr ) === '[object Array]';
 		},
 
 		/**
@@ -199,7 +188,6 @@ var SwipePaper = function( __setting ){
 
 		/**
 		 * @method: css3의 transition 접미사
-		 * @return: {Boolean or String}
 		 */
 		getCssPrefix: function(){
 			var transitionsCss   = [ '-webkit-transition', 'transition' ],
@@ -213,24 +201,21 @@ var SwipePaper = function( __setting ){
 				isWebkit         = prefixCss === 'webkit';
 
 			return {
-				'prefixCss': prefixCss,
-				'prefixJs': prefixJs,
-				'transitionsCss': transitionsCss[ isWebkit ? 0 : 1 ],
-				'transformsCss': transformsCss[ isWebkit ? 0 : 1 ],
-				'transformsJs': transformsJs[ isWebkit ? 0 : 1 ],
-				'transitionsJs': transitionsJs[ isWebkit ? 0 : 1 ],
-				'transitionsendJs': transitionsendJs[ isWebkit ? 0 : 1 ]
+				'prefixCss'        : prefixCss,
+				'prefixJs'         : prefixJs,
+				'transitionsCss'   : transitionsCss[ isWebkit ? 0 : 1 ],
+				'transformsCss'    : transformsCss[ isWebkit ? 0 : 1 ],
+				'transformsJs'     : transformsJs[ isWebkit ? 0 : 1 ],
+				'transitionsJs'    : transitionsJs[ isWebkit ? 0 : 1 ],
+				'transitionsendJs' : transitionsendJs[ isWebkit ? 0 : 1 ]
 			};
 		},
 
 		/**
 		 * @method: css3 animation 지원 여부
-		 * @return: {Boolean}
 		 */
 		hasCss3Animation: function(){
-			var Ddiv = document.createElement( 'div' );
-
-			return browser_Prefix.transitionsJs in Ddiv.style;
+			return browser_Prefix.transitionsJs in document.createElement( 'div' ).style;
 		},
 
 		/**
@@ -276,15 +261,13 @@ var SwipePaper = function( __setting ){
 		 * @method: css3 설정
 		 */
 		setCss3: function( _dom, _prop, _value ){
-			var this_style = _dom.style;
-
 			if ( _prop === 'transition' ){
-				this_style[ browser_Prefix.transitionsJs ] = _value;
+				_dom.style[ browser_Prefix.transitionsJs ] = _value;
 			} else if ( _prop === 'transform' ){
-				this_style[ browser_Prefix.transformsJs ] = _value;
+				_dom.style[ browser_Prefix.transformsJs ] = _value;
 			} else {
-				this_style[ _prop ] = _value;
-				this_style[ '-' + browser_Prefix.prefixJs + '-' + _prop ] =  _value;
+				_dom.style[ _prop ] = _value;
+				_dom.style[ '-' + browser_Prefix.prefixJs + '-' + _prop ] =  _value;
 			}
 		},
 
@@ -294,15 +277,12 @@ var SwipePaper = function( __setting ){
 		setBtnEvent: function( _doms, _evts, _callback ){
 			var evt_arr = _evts.split( ',' ),
 				evt_idx = evt_arr.length,
-				idx = _doms.length,
-				evt = '';
+				idx = _doms.length;
 
 			while( --evt_idx > -1 ){
 				while( --idx > -1 ){
-					evt = helper.trim( evt_arr[ evt_idx ]);
-
 					( function( __idx ){
-						_doms[ idx ].addEventListener( evt, function( e ){
+						_doms[ idx ].addEventListener( evt_arr[ evt_idx ], function( e ){
 							_callback( __idx );
 							e.preventDefault();
 						});
@@ -312,20 +292,20 @@ var SwipePaper = function( __setting ){
 		}
 	};
 
-	var touchEvents = { // 이벤트 함수
-		is_touch_start: false,
-		touch_start_x: 0,
-		touch_start_y: 0,
-		move_dx: 0,
+	var touchEvents = { 
+		is_touch_start : false,
+		touch_start_x  : 0,
+		touch_start_y  : 0,
+		move_dx        : 0,
 
 		/**
 		 * @method: 변수 초기화
 		 */
 		setInitVaiable: function(){
 			touchEvents.is_touch_start = false;
-			touchEvents.touch_start_x = 0;
-			touchEvents.touch_start_y = 0;
-			touchEvents.move_dx = 0;
+			touchEvents.touch_start_x  = 0;
+			touchEvents.touch_start_y  = 0;
+			touchEvents.move_dx        = 0;
 		},
 
 		/**
@@ -333,18 +313,17 @@ var SwipePaper = function( __setting ){
 		 * @param: {Object} 이벤트 객체
 		 */
 		setStart: function( e ){
-
+			// 이미 start된 동작이 있거나 움직이면 중복되지 않게 막음
 			if ( touchEvents.is_touch_start || is_Move ){
 				return false;
 			}
 
-			setAnimateBefore();
+			stopSlideShow();
 
 			if ( !touchEvents.is_touch_start && e.type === "touchstart" && e.touches.length === 1 ){
 				touchEvents.is_touch_start = true;
 				touchEvents.touch_start_x = e.touches[ 0 ].pageX;
 				touchEvents.touch_start_y = e.touches[ 0 ].pageY;
-				e.preventDefault();
 			}
 		},
 
@@ -357,21 +336,25 @@ var SwipePaper = function( __setting ){
 				scroll_dist = 0,
 				tmp_now_pos = 0;
 
+			if ( is_Move ){
+				return;
+			}
+
+			// 이미 start된 동작이 있어야만 작동
 			if ( touchEvents.is_touch_start && e.type === "touchmove" && e.touches.length === 1 ){
 				drag_dist = e.touches[ 0 ].pageX - touchEvents.touch_start_x;		// 가로 이동 거리
 				scroll_dist = e.touches[ 0 ].pageY - touchEvents.touch_start_y;		// 세로 이동 거리
 				touchEvents.move_dx = ( drag_dist / list_Width ) * 100;				// 가로 이동 백분률
 				
-				if ( Math.abs( drag_dist ) > Math.abs( scroll_dist )){ // 드래그길이가 스크롤길이 보다 클때
-
+				// 드래그길이가 스크롤길이 보다 클때
+				if ( Math.abs( drag_dist ) > Math.abs( scroll_dist )){ 
 					// TODO, 최소/최대 길이 생각하기
 					// TODO, snap기능 -> 걸리는 느낌나게 하기
 					touchEvents.move_dx = Math.max( -100, Math.min( 100, touchEvents.move_dx ));
 					tmp_now_pos = list_Pos + touchEvents.move_dx;
 					helper.setListTransition( 0, tmp_now_pos );
-				}
-				
-				e.preventDefault();
+					e.preventDefault();
+				}				
 			}
 		},
 
@@ -382,6 +365,16 @@ var SwipePaper = function( __setting ){
 		setEnd: function( e ){
 			var to_idx = 0,
 				tmp_now_pos = 0;
+
+			if ( is_Move ){
+				return;
+			}
+
+			if ( over_touch && can_move ){
+				is_to_next ? toNext() : toPrev();
+			} else {
+				helper.setListTransition( setting.duration, 0 + space_Width );
+			}
 
 			if ( touchEvents.is_touch_start && e.type === 'touchend' ){
 				tmp_now_pos = list_Pos + touchEvents.move_dx;
@@ -421,21 +414,14 @@ var SwipePaper = function( __setting ){
 	 * @method: 생성자
 	 */
 	function constructor(){
-		var tmp_dom = null,
-			css_dom = null,
-			css_txt = '',
-			evt_arr = [],
-			evt_idx = 0,
-			idx = 0,
-			evt = '';
-
 		// 플러그인에서 배열로 넘겨줄때 패스
 		// javascrit로 바로 들어오면 dom2Array
-		setting    = helper.extend( default_Option, __setting );
-		D_Plist    = helper.isArray( setting.wrap ) ? setting.wrap : helper.dom2Array( setting.wrap ); 
-		D_List     = helper.isArray( setting.list ) ? setting.list : helper.dom2Array( setting.list ); 
+		setting = helper.extend( default_Option, __setting );
+		D_Plist = helper.isArray( setting.wrap ) ? setting.wrap : helper.dom2Array( setting.wrap ); 
+		D_List  = helper.isArray( setting.list ) ? setting.list : helper.dom2Array( setting.list ); 
 
-		if ( !D_List || !D_Plist ){ // 필수요소 체크
+		// 필수요소 체크
+		if ( !D_List || !D_Plist ){ 
 			return false;
 		}
 
@@ -446,15 +432,23 @@ var SwipePaper = function( __setting ){
 		browser_Prefix = helper.getCssPrefix();
 		setting.touchMinumRange = Math.max( 1, Math.min( 100, setting.touchMinumRange ));
 
-		if ( !( helper.hasCss3Animation() && 'addEventListener' in window )){
+		// list이거나, 리스트가 1이하이면 함수 종료
+		if ( list_Len < 2 ){ 
 			return false;
 		}
 
-		if ( setting.slideShowTime ){ // 슬라이드쇼 옵션 존재
+		// 필수 요소 체크
+		if ( !( helper.hasCss3Animation() && 'addEventListener' in window && 'querySelector' in document )){
+			return false;
+		}
+
+		// 슬라이드쇼 옵션 존재
+		if ( setting.slideShowTime ){ 
 			if ( typeof setting.slideShowTime === 'boolean' ){
 				is_Slide_Show = setting.slideShowTime;
 
-				if ( is_Slide_Show ){ // true일때, 숫자값 대입
+				// true일때, 숫자값 대입
+				if ( is_Slide_Show ){ 
 					setting.slideShowTime = default_Option.slideShowTime;
 				}
 			}
@@ -463,50 +457,58 @@ var SwipePaper = function( __setting ){
 				setting.slideShowTime = parseInt( setting.slideShowTime, 10 );
 			}
 
-			if ( isNaN( setting.slideShowTime )){ // 타입이 숫자가 아니면
+			// 타입이 숫자가 아니면
+			if ( isNaN( setting.slideShowTime )){ 
 				is_Slide_Show = false;
 			} else {
 				is_Slide_Show = true;
 
-				if ( setting.duration * 2 >= setting.slideShowTime ){ // 슬라이드쇼가 애니메이션 시간보다 짧을때
+				// 슬라이드쇼가 애니메이션 시간보다 짧을때
+				if ( setting.duration * 2 >= setting.slideShowTime ){ 
 					setting.slideShowTime = setting.duration * 2;
 				}
 			}
 		}
 
-		if ( setting.toStart ){ // 애니메이션 시작 버튼
+		// 애니메이션 시작 버튼
+		if ( setting.toStart ){ 
 			D_To_Start = helper.isArray( setting.toStart ) ? setting.toStart : helper.dom2Array( setting.toStart );
 			helper.setBtnEvent( D_To_Start, setting.startEvents, startSlideShow );
 		}
 
-		if ( setting.toStop ){ // 애니메이션 멈춤 버튼
+		// 애니메이션 멈춤 버튼
+		if ( setting.toStop ){ 
 			D_To_Stop  = helper.isArray( setting.toStop ) ? setting.toStop : helper.dom2Array( setting.toStop );
 			helper.setBtnEvent( D_To_Stop, setting.stopEvents, stopSlideShow );
 		}
 
-		if ( setting.toPrev ){ // 왼쪽 버튼
+		// 왼쪽 버튼
+		if ( setting.toPrev ){ 
 			D_To_Prev  = helper.isArray( setting.toPrev ) ? setting.toPrev : helper.dom2Array( setting.toPrev );
 			helper.setBtnEvent( D_To_Prev, setting.moveEvents, toPrev );
 		}
 
-		if ( setting.toNext ){ // 오른쪽 버튼
+		// 오른쪽 버튼
+		if ( setting.toNext ){ 
 			D_To_Next  = helper.isArray( setting.toNext ) ? setting.toNext : helper.dom2Array( setting.toNext );
 			helper.setBtnEvent( D_To_Next, setting.moveEvents, toNext );
 		}
 
-		if ( setting.pages ){ // 페이징 이동
+		// 페이징 이동
+		if ( setting.pages ){ 
 			D_To_Pages = helper.isArray( setting.pages ) ? setting.pages : helper.dom2Array( setting.pages );
 			helper.setBtnEvent( D_To_Pages, setting.moveEvents, function( _idx ){
 				toSlide( _idx );
 			});
 		}
 
-		window.addEventListener( 'load', setInitStyle, false );
 		D_Wrap.addEventListener( 'touchstart', touchEvents.setStart );
 		D_Wrap.addEventListener( 'touchmove', touchEvents.setMove );
 		D_Wrap.addEventListener( 'touchend', touchEvents.setEnd );
 		D_Wrap.addEventListener( 'touchcancel', touchEvents.setEnd );
 		D_Plist.addEventListener( browser_Prefix.transitionsendJs, toSlideAnimateAfter, false );
+
+		var idx = D_List.length;
 
 		while( --idx > -1 ){
 			// 포커스시 애니메이션 on/off
@@ -522,21 +524,16 @@ var SwipePaper = function( __setting ){
 	 * @param: {Boolean} css3 지원 여부
 	 */
 	function setInitStyle( e ){
-		// 전역 설정 및 기타
 		list_Width = D_Wrap.offsetWidth;
 		
-		helper.setCss3( D_Wrap, 'user-select', 'none' );
+		D_Wrap.style.position  = 'relative';
+		D_Wrap.style.overflowY = 'hidden';
+		D_Wrap.style.overflowX = e.is_not_support ? 'scroll' : 'hidden';
 
-		css_text = "position: relative; ";
-		css_text += e.is_not_support ? "overflow-x: scroll; overflow-y: hidden;" : "overflow: hidden; ";
-		D_Wrap.style.cssText = css_text;
+		D_Plist.style.position   = 'absolute';
+		D_Plist.style.width      = '100%';
+		D_Plist.style.marginLeft = setting.firstItemMinPos + '%';
 
-		css_text = "position: absolute; ";
-		css_text += "width: 100%; ";
-		css_text += "margin-left: " + setting.firstItemMinPos + "%; ";
-		D_Plist.style.cssText = css_text;
-
-		// node
 		for ( var i = 0, len = list_Len, sumW = 0, w = 0, ml = 0, mr = 0, css_text = ''; i < len; i++ ){
 			w = D_List[ i ].offsetWidth;
 			ml = parseFloat( window.getComputedStyle( D_List[ i ] ).marginLeft );
@@ -544,20 +541,19 @@ var SwipePaper = function( __setting ){
 
 			list_Pos_Arr.push( (( sumW + ml ) / list_Width ) * 100 );
 
-			css_text = "position: absolute; ";
-			css_text += "top: 0px; ";
-			css_text += "left: " + ( sumW + ml ) + "px; ";
-			css_text += "width: " + w + "px; ";
-			css_text += "margin-left: 0px; ";
-			css_text += "margin-right: 0px; ";
-			D_List[ i ].style.cssText = css_text;
+			D_List[ i ].style.position    = 'absolute';
+			D_List[ i ].style.top         = '0px';
+			D_List[ i ].style.left        = ( sumW + ml ) + 'px';
+			D_List[ i ].style.width       = w + 'px';
+			D_List[ i ].style.marginLeft  = '0px';
+			D_List[ i ].style.marginRight = '0px';
 
 			sumW += ( w + ml + mr );
 		}
 
 		startSlideShow();
 
-		if ( typeof setting.create === 'function' ){ // 생성 후 콜백
+		if ( typeof setting.create === 'function' ){ 
 			setting.create( getNowIdx());
 		}
 	}
@@ -568,13 +564,16 @@ var SwipePaper = function( __setting ){
 	function destory(){
 		var idx = D_List.length;
 
-		D_Wrap.querySelector( 'style' ).removeAttribute( 'data-swipe' );
-
-		window.removeEventListener( 'load', setInitStyle, false );
 		D_Wrap.removeEventListener( 'touchstart', touchEvents.setStart );
 		D_Wrap.removeEventListener( 'touchmove', touchEvents.setMove );
 		D_Wrap.removeEventListener( 'touchend', touchEvents.setEnd );
 		D_Wrap.removeEventListener( 'touchcancel', touchEvents.setEnd );
+		
+		while( --idx > -1 ){
+			// 포커스시 애니메이션 on/off
+			D_List[ idx ].removeEventListener( 'focus', stopSlideShow, false );
+			D_List[ idx ].removeEventListener( 'blur', startSlideShow, false );
+		}
 	}
 
 	/**
@@ -718,15 +717,18 @@ var SwipePaper = function( __setting ){
 			gap = _to_idx - now_idx,
 			is_direct_access = arguments.length === 1;
 		
-		if ( is_Move ){ // 이동중이면 함수 종료
+		// 이동중이면 함수 종료
+		if ( is_Move ){ 
 			return false;
 		}
 
-		if ( _to_idx === now_idx ){ // 현재 슬라이면 종료
+		// 현재 슬라이면 종료
+		if ( _to_idx === now_idx ){ 
 			return false;
 		}
 
-		if ( _to_idx < 0 || _to_idx > list_Len - 1 ){ // 범위 초과면 종료
+		// 범위 초과면 종료
+		if ( _to_idx < 0 || _to_idx > list_Len - 1 ){ 
 			return false;
 		}
 
@@ -785,15 +787,16 @@ var SwipePaper = function( __setting ){
 	}
 
 	if ( constructor()){
-		// 공개 API
+		setInitStyle();
+		
 		return {
-			startSlideShow: startSlideShow,
-			stopSlideShow: stopSlideShow,
-			resizeView: resizeView,
-			getIdx: getNowIdx,
-			toNext: toNext,
-			toPrev: toPrev,
-			toSlide: toSlide
+			startSlideShow : startSlideShow,
+			stopSlideShow  : stopSlideShow,
+			resizeView     : resizeView,
+			getIdx         : getNowIdx,
+			toNext         : toNext,
+			toPrev         : toPrev,
+			toSlide        : toSlide
 		};
 	} else { 
 		// 미지원시, 최소한의 스크롤 보장
